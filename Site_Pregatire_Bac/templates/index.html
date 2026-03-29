@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meditatii Informatica BAC | Iasi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --cyan: #00e5ff;
+            --cyan-dim: #00b8cc;
+            --bg: #050a0f;
+            --bg2: #0a1520;
+            --bg3: #0f1e2e;
+            --text: #e8f4f8;
+            --muted: #6a8fa8;
+            --border: #1a3348;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Syne', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* ── GRID BACKGROUND ── */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(0,229,255,.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,229,255,.04) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+        }
+
+        .glow-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            backdrop-filter: blur(16px);
+            background: rgba(5,10,15,.8);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            color: var(--cyan);
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: .875rem;
+            margin-left: 2rem;
+            transition: color .2s;
+            font-weight: 600;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+
+        .nav-links a:hover { color: var(--cyan); }
+
+        /* ── HAMBURGER ── */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+            background: none;
+            border: none;
+            z-index: 200;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--cyan);
+            border-radius: 2px;
+            transition: transform .3s, opacity .3s;
+        }
+
+        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* ── MOBILE MENU ── */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 64px; left: 0; right: 0;
+            background: rgba(5,10,15,.97);
+            border-bottom: 1px solid var(--border);
+            flex-direction: column;
+            padding: 1.5rem 2rem 2rem;
+            gap: 1.25rem;
+            z-index: 99;
+            backdrop-filter: blur(16px);
+            animation: slideDown .25s ease;
+        }
+
+        .mobile-menu.open { display: flex; }
+
+        .mobile-menu a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            padding: .5rem 0;
+            border-bottom: 1px solid var(--border);
+            transition: color .2s;
+        }
+
+        .mobile-menu a:last-child { border-bottom: none; }
+        .mobile-menu a:hover { color: var(--cyan); }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 640px) {
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+        }
+
+        /* ── SECTIONS ── */
+        section {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── HERO ── */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 6rem 2rem 4rem;
+        }
+
+        .hero-inner {
+            max-width: 860px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            font-family: 'Space Mono', monospace;
+            font-size: .75rem;
+            color: var(--cyan);
+            border: 1px solid var(--cyan);
+            padding: .35rem 1rem;
+            border-radius: 999px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            animation: fadeUp .6s ease both;
+        }
+
+        .hero-title {
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            animation: fadeUp .7s .1s ease both;
+        }
+
+        .hero-title span {
+            color: var(--cyan);
+            position: relative;
+        }
+
+        .hero-sub {
+            font-size: 1.2rem;
+            color: var(--muted);
+            max-width: 580px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+            animation: fadeUp .8s .2s ease both;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: var(--cyan);
+            color: #050a0f;
+            font-weight: 700;
+            font-size: .95rem;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            padding: .9rem 2.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: transform .2s, box-shadow .2s;
+            box-shadow: 0 0 24px rgba(0,229,255,.3);
+            animation: fadeUp .9s .3s ease both;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(0,229,255,.5);
+        }
+
+        /* ── CODE SNIPPET DECORATION ── */
+        .code-snippet {
+            font-family: 'Space Mono', monospace;
+            font-size: .72rem;
+            color: rgba(0,229,255,.25);
+            position: absolute;
+            white-space: pre;
+            pointer-events: none;
+            line-height: 1.6;
+            animation: fadeUp 1.2s .5s ease both;
+        }
+
+        .snippet-left  { left: 2rem;  top: 35%; text-align: left; }
+        .snippet-right { right: 2rem; top: 45%; text-align: right; }
+
+        @media (max-width: 768px) {
+            .code-snippet { display: none; }
+        }
+
+        /* ── STATS ROW ── */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-top: 4rem;
+            animation: fadeUp 1s .4s ease both;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--cyan);
+        }
+
+        .stat-label {
+            font-size: .8rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-top: .25rem;
+        }
+
+        /* ── DIVIDER ── */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 0 4rem;
+        }
+
+        /* ── CARDS SECTION ── */
+        #oferta, #despre, #contact {
+            padding: 6rem 2rem;
+        }
+
+        .section-label {
+            font-family: 'Space Mono', monospace;
+            font-size: .75rem;
+            color: var(--cyan);
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            margin-bottom: .75rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .section-sub {
+            color: var(--muted);
+            font-size: 1rem;
+            max-width: 520px;
+            line-height: 1.7;
+            margin-bottom: 3rem;
+        }
+
+        /* ── OFFER CARDS ── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: border-color .3s, transform .3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--cyan);
+            transform: scaleX(0);
+            transition: transform .3s;
+            transform-origin: left;
+        }
+
+        .card:hover {
+            border-color: var(--cyan);
+            transform: translateY(-4px);
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: .6rem;
+            color: var(--text);
+        }
+
+        .card-desc {
+            font-size: .9rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* ── ABOUT ── */
+        #despre .inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        @media (max-width: 700px) {
+            #despre .inner {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .about-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: .85rem;
+        }
+
+        .about-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: .75rem;
+            font-size: .95rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .about-list li::before {
+            content: '▸';
+            color: var(--cyan);
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .terminal-box {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: var(--bg2);
+            padding: .6rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot-r { background: #ff5f57; }
+        .dot-y { background: #febc2e; }
+        .dot-g { background: #28c840; }
+
+        .terminal-body {
+            padding: 1.25rem;
+            font-family: 'Space Mono', monospace;
+            font-size: .78rem;
+            line-height: 1.9;
+            color: var(--muted);
+        }
+
+        .t-green  { color: #4ec964; }
+        .t-cyan   { color: var(--cyan); }
+        .t-yellow { color: #f5c518; }
+        .t-white  { color: var(--text); }
+
+        /* ── CONTACT ── */
+        #contact {
+            background: var(--bg2);
+            border-top: 1px solid var(--border);
+        }
+
+        #contact .inner {
+            max-width: 680px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .contact-card {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.75rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .6rem;
+            min-width: 220px;
+            transition: border-color .3s, transform .3s;
+            text-decoration: none;
+        }
+
+        .contact-card:hover {
+            border-color: var(--cyan);
+            transform: translateY(-3px);
+        }
+
+        .contact-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-email { background: rgba(0,229,255,.1); }
+        .icon-wa    { background: rgba(37,211,102,.15); }
+
+        .contact-label {
+            font-family: 'Space Mono', monospace;
+            font-size: .7rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .12em;
+        }
+
+        .contact-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            position: relative;
+            z-index: 1;
+            border-top: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            font-family: 'Space Mono', monospace;
+            font-size: .72rem;
+            color: var(--muted);
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity .6s ease, transform .6s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* ── MOBILE RESPONSIVE ── */
+        @media (max-width: 640px) {
+            #hero {
+                padding: 5rem 1.25rem 3rem;
+            }
+
+            .hero-sub {
+                font-size: 1rem;
+            }
+
+            .btn-primary {
+                width: 100%;
+                text-align: center;
+                padding: 1rem;
+            }
+
+            .stats-row {
+                gap: 1.5rem;
+                margin-top: 2.5rem;
+            }
+
+            .stat-num { font-size: 1.8rem; }
+
+            #oferta, #despre, #contact {
+                padding: 4rem 1.25rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #despre .inner {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .contact-cards {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .contact-card {
+                min-width: unset;
+                flex-direction: row;
+                justify-content: flex-start;
+                gap: 1rem;
+                padding: 1.25rem 1.5rem;
+            }
+
+            .contact-card .contact-label { display: none; }
+            .contact-card .contact-value { font-size: .95rem; }
+
+            footer {
+                font-size: .65rem;
+                display: flex;
+                flex-direction: column;
+                gap: .4rem;
+            }
+
+            footer span:nth-child(2) { display: none; }
+
+            .divider { margin: 0 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Background effects -->
+<div class="grid-bg"></div>
+<div class="glow-blob" style="width:500px;height:500px;background:#00e5ff;top:-100px;left:-200px;"></div>
+<div class="glow-blob" style="width:400px;height:400px;background:#0066ff;bottom:20%;right:-150px;"></div>
+
+<!-- NAV -->
+<nav>
+    <a href="#hero" class="nav-logo" style="text-decoration:none;">// meditatii.info</a>
+    <div class="nav-links">
+        <a href="#oferta">Ofertă</a>
+        <a href="#despre">Despre</a>
+        <a href="#contact">Contact</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Meniu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="#oferta" onclick="closeMenu()">Ofertă</a>
+    <a href="#despre" onclick="closeMenu()">Despre</a>
+    <a href="#contact" onclick="closeMenu()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+    <div class="code-snippet snippet-left">def bacalaureat():
+    subiecte = ["sortare", "grafuri",
+                "backtracking"]
+    for s in subiecte:
+        learn(s)
+    return nota_10</div>
+
+    <div class="code-snippet snippet-right">// pregătire completă
+// clase 9 - 12
+// BAC informatică
+// 100% dedicat</div>
+
+    <div class="hero-inner">
+        <div class="badge">🎓 Meditatii Informatica · Iasi</div>
+
+        <h1 class="hero-title">
+            Bacul la<br>
+            <span>Informatică</span><br>
+            fără stres
+        </h1>
+
+        <p class="hero-sub">
+            Pregătire individualizată pentru elevi de clasele 9–12.
+            De la zero la nota maximă, pas cu pas, pe înțelesul tău.
+        </p>
+
+        <a href="#contact" class="btn-primary">Contactează-mă acum</a>
+
+        <div class="stats-row">
+            <div class="stat">
+                <div class="stat-num">9–12</div>
+                <div class="stat-label">Clase</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">100%</div>
+                <div class="stat-label">Dedicat</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">BAC</div>
+                <div class="stat-label">Focusat</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- OFERTA -->
+<section id="oferta">
+    <div style="max-width:1000px; margin:0 auto; text-align:center;" class="reveal">
+        <p class="section-label">// ce ofer</p>
+        <h2 class="section-title">Totul pentru BAC</h2>
+        <p class="section-sub" style="margin: 0 auto 3rem;">
+            Fiecare lecție este adaptată nevoilor tale — fie că ești la început sau vrei să îți perfecționezi tehnica.
+        </p>
+    </div>
+
+    <div class="cards-grid">
+        <div class="card reveal">
+            <div class="card-icon">📚</div>
+            <div class="card-title">Teorie completă</div>
+            <div class="card-desc">Toate subiectele din programa de BAC explicate clar: tablouri, șiruri, funcții, recursivitate, sortare, grafuri și mai mult.</div>
+        </div>
+        <div class="card reveal">
+            <div class="card-icon">💻</div>
+            <div class="card-title">Exerciții practice</div>
+            <div class="card-desc">Rezolvăm subiecte din anii anteriori și simulări. Practică intensivă pe tipurile de probleme care apar cel mai des la examen.</div>
+        </div>
+        <div class="card reveal">
+            <div class="card-icon">🎯</div>
+            <div class="card-title">Strategii de examen</div>
+            <div class="card-desc">Înveți cum să abordezi subiectele în timp limitat, cum să gestionezi panica și cum să maximizezi punctajul.</div>
+        </div>
+        <div class="card reveal">
+            <div class="card-icon">⚡</div>
+            <div class="card-title">Ritm personalizat</div>
+            <div class="card-desc">Nu există un ritm universal. Mergem exact în viteza ta, cu pauze, recapitulări și exerciții suplimentare ori de câte ori e nevoie.</div>
+        </div>
+        <div class="card reveal">
+            <div class="card-icon">🔄</div>
+            <div class="card-title">Feedback constant</div>
+            <div class="card-desc">Corectăm greșelile pe loc, explicăm de ce și ne asigurăm că nu le repeți la examen.</div>
+        </div>
+        <div class="card reveal">
+            <div class="card-icon">📱</div>
+            <div class="card-title">Suport între ședințe</div>
+            <div class="card-desc">Ai o întrebare între meditatii? Îmi poți scrie pe WhatsApp și îți răspund cât mai repede.</div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DESPRE -->
+<section id="despre">
+    <div class="inner">
+
+        <!-- POZA -->
+        <div class="reveal" style="display:flex; flex-direction:column; align-items:center; gap:1rem;">
+            <div style="width:180px; height:180px; border-radius:50%; overflow:hidden; border:3px solid var(--cyan); box-shadow:0 0 32px rgba(0,229,255,.2);">
+                <img src="{{ url_for('static', filename='eu.jpg') }}" alt="Foto profil"
+                     style="width:100%; height:100%; object-fit:cover;"/>
+            </div>
+            <span style="font-family:'Space Mono',monospace; font-size:.85rem; color:var(--cyan); letter-spacing:.1em;">Mandea Marian</span>
+            <span style="font-size:.8rem; color:var(--muted);">Student FII UAIC Iași</span>
+        </div>
+
+        <!-- TEXT -->
+        <div class="reveal">
+            <p class="section-label">// despre mine</p>
+            <h2 class="section-title">De ce să alegi meditatii cu mine?</h2>
+            <ul class="about-list">
+                <li>Student la Facultatea de Informatică, UAIC Iași — materia o știu la zi, nu din amintiri vechi</li>
+                <li>Predau pe înțelesul elevului, nu al profesorului — simplific fără să simplific prea mult</li>
+                <li>Mă concentrez exclusiv pe ce apare la BAC — fără teorie inutilă, fără pierdere de timp</li>
+                <li>Ore online</li>
+                <li>Disponibil și pe WhatsApp între ședințe pentru întrebări rapide</li>
+                <li>Prețuri corecte, negociabile în funcție de situație</li>
+            </ul>
+        </div>
+
+        <!-- TERMINAL -->
+        <div class="reveal">
+            <div class="terminal-box">
+                <div class="terminal-header">
+                    <span class="dot dot-r"></span>
+                    <span class="dot dot-y"></span>
+                    <span class="dot dot-g"></span>
+                    <span style="font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);margin-left:.5rem;">profil.py</span>
+                </div>
+                <div class="terminal-body">
+                    <span class="t-yellow">student</span> = {<br>
+                    &nbsp;&nbsp;<span class="t-cyan">"facultate"</span>: <span
+                        class="t-green">"FII UAIC Iasi"</span>,<br>
+                    &nbsp;&nbsp;<span class="t-cyan">"specializare"</span>: <span
+                        class="t-green">"Informatica"</span>,<br>
+                    &nbsp;&nbsp;<span class="t-cyan">"meditatii"</span>: <span
+                        class="t-green">"cls 9-12 BAC"</span>,<br>
+                    &nbsp;&nbsp;<span class="t-cyan">"locatie"</span>: <span class="t-green">"Online"</span>,<br>
+                    &nbsp;&nbsp;<span class="t-cyan">"disponibil"</span>: <span class="t-yellow">True</span>,<br>
+                    }<br><br>
+                    <span class="t-white">print</span>(<span class="t-green">"Haideți să lucrăm!"</span>)
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+    <div class="inner reveal">
+        <p class="section-label">// contact</p>
+        <h2 class="section-title">Hai să vorbim</h2>
+        <p class="section-sub" style="margin: 0 auto 0;">
+            Scrie-mi un mesaj sau sună-mă — răspund rapid.
+            Prima discuție este gratuită și fără nicio obligație.
+        </p>
+
+        <div class="contact-cards">
+
+            <!-- EMAIL -->
+            <a href="https://mail.google.com/mail/?view=cm&to=mandea.mariann21@gmail.com" target="_blank" class="contact-card">
+                <div class="contact-icon icon-email">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <rect x="2" y="4" width="20" height="16" rx="2" stroke="#00e5ff" stroke-width="1.5"/>
+                        <path d="M2 7l10 7 10-7" stroke="#00e5ff" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <span class="contact-label">Email</span>
+                <span class="contact-value">mandea.mariann21@gmail.com</span>
+            </a>
+
+            <!-- WHATSAPP -->
+            <a href="https://wa.me/40769190311" target="_blank" class="contact-card">
+                <div class="contact-icon icon-wa">
+                    <!-- WhatsApp SVG icon -->
+                    <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="16" cy="16" r="14" fill="#25D366"/>
+                        <path d="M22.5 9.5C20.8 7.8 18.5 6.9 16.1 6.9C11.1 6.9 7.1 10.9 7.1 15.9C7.1 17.5 7.5 19.1 8.3 20.5L7 25L11.6 23.7C13 24.4 14.5 24.8 16.1 24.8C21.1 24.8 25.1 20.8 25.1 15.8C25.1 13.4 24.2 11.2 22.5 9.5ZM16.1 23.3C14.7 23.3 13.3 22.9 12.1 22.3L11.8 22.1L9.1 22.9L9.9 20.3L9.7 20C8.9 18.7 8.6 17.3 8.6 15.9C8.6 11.7 12 8.4 16.1 8.4C18.1 8.4 19.9 9.2 21.3 10.6C22.7 12 23.5 13.8 23.5 15.8C23.6 19.9 20.3 23.3 16.1 23.3ZM20.3 17.7C20.1 17.6 19 17.1 18.8 17C18.6 16.9 18.5 16.9 18.3 17.1C18.1 17.3 17.8 17.7 17.6 17.9C17.5 18.1 17.3 18.1 17.1 18C16.3 17.6 15.5 17.1 14.9 16.4C14.3 15.7 13.9 15 13.6 14.2C13.5 14 13.6 13.8 13.7 13.7C13.8 13.6 14 13.4 14.1 13.3C14.2 13.2 14.3 13 14.3 12.9C14.4 12.7 14.3 12.6 14.3 12.5C14.2 12.4 13.8 11.3 13.6 10.9C13.4 10.5 13.2 10.5 13.1 10.5H12.7C12.5 10.5 12.2 10.6 12 10.8C11.8 11 11.2 11.6 11.2 12.7C11.2 13.8 12 14.9 12.1 15C12.2 15.1 13.8 17.6 16.3 18.6C17.8 19.2 18.4 19.3 19.2 19.1C19.7 19 20.5 18.5 20.7 17.9C20.9 17.4 20.9 16.9 20.8 16.8C20.7 17.8 20.5 17.8 20.3 17.7Z" fill="white"/>
+                    </svg>
+                </div>
+                <span class="contact-label">WhatsApp</span>
+                <span class="contact-value">+40 769 190 311</span>
+            </a>
+
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <span>© 2026 · Meditatii Informatica BAC · Iasi</span>
+    <span style="margin: 0 1rem; color:var(--border);">|</span>
+</footer>
+
+<script>
+    // Hamburger menu
+    const btn = document.getElementById('hamburger');
+    const menu = document.getElementById('mobileMenu');
+
+    btn.addEventListener('click', () => {
+        btn.classList.toggle('open');
+        menu.classList.toggle('open');
+    });
+
+    function closeMenu() {
+        btn.classList.remove('open');
+        menu.classList.remove('open');
+    }
+
+    document.addEventListener('click', (e) => {
+        if (!btn.contains(e.target) && !menu.contains(e.target)) closeMenu();
+    });
+
+    // Scroll reveal
+    const els = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach((e, i) => {
+            if (e.isIntersecting) {
+                setTimeout(() => e.target.classList.add('visible'), i * 80);
+            }
+        });
+    }, { threshold: 0.12 });
+    els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
