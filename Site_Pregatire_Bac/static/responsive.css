@@ -1,0 +1,97 @@
+@media (max-width: 768px) {
+    .code-snippet {
+        display: none;
+    }
+}
+
+@media (max-width: 700px) {
+    #despre .inner {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .nav-links {
+        display: none;
+    }
+    .hamburger {
+        display: flex;
+    }
+
+    #hero {
+        padding: 5rem 1.25rem 3rem;
+    }
+
+    .hero-sub {
+        font-size: 1rem;
+    }
+
+    .btn-primary {
+        width: 100%;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .stats-row {
+        gap: 1.5rem;
+        margin-top: 2.5rem;
+    }
+
+    .stat-num {
+        font-size: 1.8rem;
+    }
+
+    #oferta,
+    #despre,
+    #contact {
+        padding: 4rem 1.25rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #despre .inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+    }
+
+    .contact-cards {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .contact-card {
+        min-width: unset;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 1rem;
+        padding: 1.25rem 1.5rem;
+    }
+
+    .contact-card .contact-label {
+        display: none;
+    }
+    .contact-card .contact-value {
+        font-size: .95rem;
+    }
+
+    footer {
+        font-size: .65rem;
+        display: flex;
+        flex-direction: column;
+        gap: .4rem;
+    }
+
+    footer span:nth-child(2) {
+        display: none;
+    }
+
+    .divider {
+        margin: 0 1.25rem;
+    }
+}
